@@ -1,1 +1,33 @@
-<p>registrar works!</p>
+<div class="body-form">
+    <main class="form-signin text-center">
+      <form [formGroup]="loginForm">
+        <h1 class="h3 mb-3 fw-normal">Por favor inciar sesion</h1>
+          <div class="form-group">
+            <label for="title">Username*</label>
+            <input type="text" id="email" placeholder="Email" class="form-control" formControlName="email" />
+            <span style="color:Red;"
+              *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.required">Email is
+              required.</span>
+          </div>
+    
+          <div class="form-group">
+            <label for="description">Password*</label>
+            <input id="password" type="password" placeholder="Password" class="form-control" formControlName="password" />
+            <span style="color:Red;"
+              *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors?.required">Password is
+              required.</span>
+          </div>
+          <span style="color:Red;">{{errorMessage}}</span>
+          <div class="buttons-container center">
+            <button class="btn btn-primary" (click)="signIn()">
+              Log in
+            </button>
+            <button class="btn btn-success" (click)="createUser()">
+              Create Account
+            </button>
+          </div>
+      </form>
+    </main>  
+    
+  </div>
+  
