@@ -25,6 +25,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { CarritoComponent } from './carrito/carrito.component';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -52,7 +53,7 @@ import { CarritoComponent } from './carrito/carrito.component';
     MatIconModule,
     MatCardModule
   ],
-  providers: [],
+  providers: [ NgbActiveModal ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

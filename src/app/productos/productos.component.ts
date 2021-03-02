@@ -8,6 +8,7 @@ import { DbfirebaseService } from '../servicios/dbfirebase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { DocumentReference } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-productos',
@@ -20,6 +21,8 @@ export class ProductosComponent implements OnInit {
   prodForm: FormGroup;
   user: User;
   listProducts: Array<Item> = [];
+  loader= true;
+  productosView = false;
 
   constructor( 
     private afAuth: AngularFireAuth, 
@@ -28,7 +31,8 @@ export class ProductosComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ngZone: NgZone,
     private router: Router,
-    private modalService: NgbModal ) { }
+    private modalService: NgbModal,
+    private activeModal: NgbActiveModal ) { }
 
   ngOnInit(){
 
@@ -77,6 +81,8 @@ export class ProductosComponent implements OnInit {
         };
 
       this.listProducts.push(datos);
+      this.loader = false;
+      this.productosView = true;
       console.log(this.listProducts);
       });
     });
@@ -108,10 +114,14 @@ export class ProductosComponent implements OnInit {
  
     let todo: form = this.prodForm.value;
     this._db.save(todo)
-      .then(response => this.load()) 
+      .then(response => this.modalService.dismissAll(response.id) ) 
       .catch(err => console.error(err));
+     
+      this.loader = true;
+      this.productosView = false;
+      this.load()
   }
- 
+
 
 
 
