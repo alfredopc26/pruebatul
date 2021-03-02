@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pruebatul';
+
+  openCart = false;
+
+  cart(){ //Se usa para abrir o cerrar el carrito
+    this.openCart = !this.openCart;
+  }
+
 }
