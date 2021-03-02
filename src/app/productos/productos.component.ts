@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from '@firebase/auth-types';
-import { IItem } from '../interfaces/item.interface';
-import { CarritoService } from '../carrito.service';
+import { Item } from '../interfaces/item.interface';
+import { form } from '../interfaces/form.interface';
+import { CarritoService } from '../servicios/carrito.service';
+import { DbfirebaseService } from '../servicios/dbfirebase.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-productos',
@@ -11,48 +16,103 @@ import { CarritoService } from '../carrito.service';
 })
 export class ProductosComponent implements OnInit {
 
-  public listProducts:Array<IItem> = [{
-    id: 0,
-    img: "https://i.blogs.es/d5526e/arduino-uno/450_1000.jpg",
-    name: "Arduino",
-    price: 500,
-    description: "Éste nuevo modelo Arduino UNO (rev3) es practicamente igual que su predecesor Duemilanove y 100% compatible pero incorpora ésta vez una autoselección del voltaje de alimentacion (DC/USB) gracias a un chip MOSFET incluido en la placa.",
-    quantity : 1
-  },
-  {
-    id: 1,
-    img: "https://electronilab.co/wp-content/uploads/2016/02/NodeMCU-%E2%80%93-Board-de-desarrollo-con-m%C3%B3dulo-ESP8266-WiFi-y-Lua-1.jpg",
-    name: "ESP8266 NodeMCU",
-    price: 350,
-    description: "El ESP8266 es un chip Wi-Fi de bajo coste que funciona mediante el protocolo TCP/IP. Incluye un microcontrolador (Tensilica Xtensa LX106) para manejar dicho protocolo y el software necesario para la conexión 802.11. Además la mayoría de modelos dispone de entradas/salidas digitales de propósito general (GPIO), así como una entrada analógica (ADC de 10bit).",
-    quantity : 1
-  },
-  {
-    id: 2,
-    img: "https://createc3d.com/shop/1244-thickbox_default/comprar-modulo-rele-5v-compatible-con-arduino-1-canal-precio-oferta.jpg",
-    name: "Modulo Relay Rele De 1 Canal 5v 10a Arduino Pic Avr Robotica",
-    price: 120,
-    description: "Módulo de relevadores (reles) para conmutación de cargas de potencia. Los contactos de los relevadores están diseñados para conmutar cargas de hasta 10 A y 250VAC (30VDC), aunque recomendamos dejar un márgen hacia abajo de estos límites. La señal de control puede provenir de cualquier circuito de control TTL o CMOS como un microcontrolador.",
-    quantity : 1
-  }]
-
-  constructor( private afAuth: AngularFireAuth, private _cartService:CarritoService ) { }
-
+  closeResult = '';
+  prodForm: FormGroup;
   user: User;
+  listProducts: Array<Item> = [];
+
+  constructor( 
+    private afAuth: AngularFireAuth, 
+    private _cartService:CarritoService, 
+    private _db:DbfirebaseService,
+    private formBuilder: FormBuilder,
+    private ngZone: NgZone,
+    private router: Router,
+    private modalService: NgbModal ) { }
 
   ngOnInit(){
 
+    this.prodForm = this.formBuilder.group({
+      categoria: ['', Validators.required],
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      image: [''],
+      precio: ['', Validators.required]
+    });
+    
     this.afAuth.user.subscribe(user => {
       if (user){
         this.user = user;
+        this.load();
+      }else{
+        this.ngZone.run(() => {
+          this.router.navigate(['/login']);
+        });
       }
     });
+
+
+  
   }
 
-  public addCart(product:IItem)
+
+  public addCart(product:Item)
   {
     this._cartService.changeCart(product);
   }
+
+  load() {
+    this._db.get().subscribe(response => {
+      this.listProducts = [];
+      response.docs.forEach(value => {
+        const data = value.data();
+        const id = value.id;
+        const datos: Item = {
+          id: id,
+          name: data.nombre,
+          img: data.image,
+          description: data.descripcion,
+          price: data.precio,
+          quantity: 1,
+        };
+
+      this.listProducts.push(datos);
+      console.log(this.listProducts);
+      });
+    });
+    }
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  saveTodo() {
+    // Validar el formulario
+    if (this.prodForm.invalid) {
+      return;
+    }
+ 
+    let todo: form = this.prodForm.value;
+    this._db.save(todo)
+      .then(response => this.load()) 
+      .catch(err => console.error(err));
+  }
+ 
+
 
 
 }

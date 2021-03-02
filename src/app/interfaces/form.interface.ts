@@ -1,4 +1,4 @@
-export interface Item {
+export interface form {
     id:any,
     img:string,
     name:string,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IItem } from '../interfaces/item.interface';
+import { Item } from '../interfaces/item.interface';
 import { Observable } from 'rxjs';
-import { CarritoService } from '../carrito.service';
+import { CarritoService } from '../servicios/carrito.service';
 
 @Component({
   selector: 'app-carrito',
@@ -10,7 +10,7 @@ import { CarritoService } from '../carrito.service';
 })
 export class CarritoComponent implements OnInit {
 
-  public items: Array<IItem>
+  public items: Array<Item>
   public totalPrice:number = 0;
   public totalQuantity:number = 0;
 
@@ -27,7 +27,7 @@ export class CarritoComponent implements OnInit {
     })
   }
 
-  public remove(producto:IItem)
+  public remove(producto:Item)
   {
     this._cartService.removeElementCart(producto);
   }

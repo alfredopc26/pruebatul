@@ -1,0 +1,22 @@
+<div class="wrapper">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TUL App</a>
+      
+      <div class="d-flex btn-toolbar">
+        <div class="example-button-row">
+            <div class="example-flex-container">
+              <button mat-icon-button class='text-white'>
+                <mat-icon id="cart" (click)="cart()" >add_shopping_cart</mat-icon>
+              </button>
+              <button mat-icon-button class='bg-white'>
+                <mat-icon (click)="logout()">exit_to_app</mat-icon>
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <app-carrito *ngIf="openCart"></app-carrito> 
+</div>
+

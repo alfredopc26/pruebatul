@@ -23,7 +23,7 @@
           *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors?.required">Password is
           required.</span>
       </div>
-
+      <span style="color:Red;">{{errorMessage}}</span>
       <div class="buttons-container center">
         <button class="btn btn-primary" (click)="signIn()">
           Log in

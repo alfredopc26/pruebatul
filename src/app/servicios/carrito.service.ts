@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IItem } from './interfaces/item.interface';
+import { Item } from '../interfaces/item.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
 
-  private cart = new BehaviorSubject<Array<IItem>>(null); 
+  private cart = new BehaviorSubject<Array<Item>>(null); 
 
   public currentDataCart$ = this.cart.asObservable(); 
 
   constructor() { }
 
-  public changeCart(newData: IItem) {
+  public changeCart(newData: Item) {
     //Obtenemos el valor actual
     let listCart = this.cart.getValue();
     //Si no es el primer item del carrito
@@ -41,7 +41,7 @@ export class CarritoService {
   }
 
 
-  public removeElementCart(newData:IItem){
+  public removeElementCart(newData:Item){
     //Obtenemos el valor actual de carrito
     let listCart = this.cart.getValue();
     //Buscamos el item del carrito para eliminar
@@ -55,5 +55,7 @@ export class CarritoService {
     }
     this.cart.next(listCart); //Enviamos el valor a todos los Observers que estan escuchando nuestro Observable
   }
+
+  
   
 }

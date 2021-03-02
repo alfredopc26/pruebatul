@@ -28,6 +28,10 @@ export class LoginComponent implements OnInit {
             this.ngZone.run(() => {
               this.router.navigate(['/productos']);
             });
+          }else{
+            this.ngZone.run(() => {
+              this.router.navigate(['/login']);
+            });
           }
         });
       }

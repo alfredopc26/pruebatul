@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgZone} from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from '@firebase/auth-types';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-header',
@@ -9,22 +10,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent implements OnInit {
-
+  
   @Input()
   user: User;
 
+
   errorMessage = '';
+  openCart = false;
 
   constructor( 
     private afAuth: AngularFireAuth ,
-    private router: Router ) { }
+    private router: Router,
+    private ngZone: NgZone
+     ) { }
 
-  ngOnInit(): void {
+  ngOnInit(){
+  }
+
+  cart(){ //Se usa para abrir o cerrar el carrito
+    this.openCart = !this.openCart;
   }
 
   logout() {
     this.afAuth.signOut().then(() => {
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
     }).catch(response => {
       this.errorMessage = response.message;
     });
