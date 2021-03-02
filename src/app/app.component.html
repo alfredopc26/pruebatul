@@ -5,10 +5,10 @@
       <li><a href="#about">About</a></li>
     </ul> <!--end navbar-left -->
     <ul class="navbar-right">
-      <li><a id="cart" (click)="cart()"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+      <li><a  id="cart" (click)="cart()"><i class="fa fa-shopping-cart"></i> Cart</a></li>
     </ul> <!--end navbar-right -->
   </div> <!--end container -->
 </nav>
-<app-cart *ngIf="openCart"></app-cart> 
+<app-carrito *ngIf="openCart"></app-carrito> 
 <app-productos></app-productos>
 <router-outlet></router-outlet>
