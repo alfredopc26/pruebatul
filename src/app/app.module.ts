@@ -26,6 +26,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
 import { CarritoComponent } from './carrito/carrito.component';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {MatBadgeModule} from '@angular/material/badge'
 
 
 
@@ -51,7 +52,8 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatBadgeModule
   ],
   providers: [ NgbActiveModal ],
   bootstrap: [AppComponent]
