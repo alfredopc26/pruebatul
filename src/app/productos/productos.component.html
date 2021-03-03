@@ -27,8 +27,8 @@
                       <button mat-raised-button (click)="open(categoria)" >Agregar Categoria</button>
                     <div class="float-right">
                       <select class="custom-select" style=" width: auto" (change)="loadProductCat($event.target.value)">
-                        <option value="">Seleccione categoria</option>
-                        <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>
+                        <option value="">Todas las categorias</option>
+                        <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>                        
                       </select>
                     </div>
                   </div>
@@ -38,14 +38,19 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3  g-3" *ngIf='productosView'>
                   <div class="col" *ngFor="let product of listProducts">
                     <div class="card shadow-sm">
-                      <img [src]="product.img" class="card-img-top" width="100%" height="225" alt="arduino">
-                      <div class='card-header'>{{product.name}}</div>
+                      <img [src]="product.img" class="card-img-top" height="225" alt="image">
+                      <div class='card-header'>
+                        {{product.name}}
+                      </div>
                       <div class="card-body">
-                        <p class="card-text">{{product.description}}</p>
                         <div class="d-flex justify-content-between align-items-center">
                           <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Detalles</button>
-                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addCart(product)" *ngIf="!checkAdded(product.id)" >Añadir al carrito</button>
+                            <button mat-mini-fab >
+                              <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-mini-fab (click)="addCart(product)" *ngIf="!checkAdded(product.id)">
+                              <mat-icon>add_shopping_cart</mat-icon>
+                            </button>
                           </div>
                           <small class="text-muted">Precio: ${{product.price}}</small>
                         </div>
@@ -97,8 +102,8 @@
       </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Close</button>
-        <button class="btn btn-primary" (click)="saveTodo()">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
+        <button class="btn btn-primary" (click)="saveTodo()">Guardar</button>
     </div>
   </ng-template>
 
@@ -122,7 +127,7 @@
       </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Close</button>
-        <button class="btn btn-primary" (click)="saveCat()">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
+        <button class="btn btn-primary" (click)="saveCat()">Guardar</button>
     </div>
   </ng-template>

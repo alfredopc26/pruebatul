@@ -175,6 +175,11 @@ export class ProductosComponent implements OnInit {
 
   loadProductCat(ref){
 
+    if(ref==""){
+      this.loader= true;
+      this.productosView = false;
+      this.load();
+    }else{
     this._db.getByCat(ref).subscribe(response => {
       this.listProducts = [];
       response.docs.forEach(value => {
@@ -195,6 +200,8 @@ export class ProductosComponent implements OnInit {
       console.log(this.listProducts);
       });
     });
+          
+    }
   }
 
   private getDismissReason(reason: any): string {
