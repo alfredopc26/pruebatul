@@ -15,8 +15,6 @@ export class HeaderComponent implements OnInit {
   @Input()
   user: User;
 
-
-
   errorMessage = '';
   openCart = false;
   totalQuantity:number = 0;
@@ -28,6 +26,10 @@ export class HeaderComponent implements OnInit {
      ) { }
 
   ngOnInit(){
+    this.afAuth.user.subscribe(user => {
+      this.user = user;
+    });
+    
     this._cartService.currentDataCart$.subscribe(x=>{
       if(x)
       {

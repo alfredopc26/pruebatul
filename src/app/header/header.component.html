@@ -1,16 +1,18 @@
 <div class="wrapper">
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info" >
     <div class="container-fluid">
       <a class="navbar-brand" href="#">TUL App</a>
       
       <div class="d-flex btn-toolbar">
         <div class="example-button-row">
             <div class="example-flex-container">
+              {{user.email}}
               <button mat-icon-button class='text-white'>
                 <mat-icon id="cart" (click)="cart()" matBadge="{{totalQuantity}}" matBadgeColor="warn">shopping_cart</mat-icon>
               </button>
-              <button mat-icon-button class='bg-white'>
-                <mat-icon (click)="logout()">exit_to_app</mat-icon>
+              <button mat-raised-button (click)="logout()"  >
+                Salir de la aplicacion
+                <mat-icon title="Salir de la aplicacion">exit_to_app</mat-icon>
               </button>
             </div>
         </div>
