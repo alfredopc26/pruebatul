@@ -8,7 +8,7 @@ import { DbfirebaseService } from '../servicios/dbfirebase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import { DocumentReference } from '@angular/fire/firestore';
+
 
 @Component({
   selector: 'app-productos',
@@ -60,7 +60,7 @@ export class ProductosComponent implements OnInit {
   }
 
 
-  public addCart(product:Item)
+  addCart(product:Item)
   {
     this._cartService.changeCart(product);
   }

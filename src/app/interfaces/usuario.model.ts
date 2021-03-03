@@ -1,8 +1,7 @@
-export class Usuario {
+export class User {
 
     id: string;
-    nombre: string;
-    apellido: string;
-    correo: string;
-    image: string;
+    name: string;
+    last_name: string;
+    email: string;
 }
