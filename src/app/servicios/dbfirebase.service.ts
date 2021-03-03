@@ -17,6 +17,12 @@ export class DbfirebaseService {
     return this.db.collection<Item>(this.CollectionName).get();
   }
 
+  getByCat( cat: string ): Observable<firebase.firestore.QuerySnapshot> {
+            
+    return this.db.collection<Item>(this.CollectionName, ref => ref.where('categoria', '==', cat)).get();
+    
+  }
+
   save(item: Item): Promise<DocumentReference> {
     return this.db.collection(this.CollectionName).add(item);
   }

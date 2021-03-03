@@ -18,16 +18,17 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ProductosComponent } from './productos/productos.component';
 import { RegistrarComponent } from './registrar/registrar.component';
 import { HeaderComponent } from './header/header.component';
+import { CarritoComponent } from './carrito/carrito.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
-import { CarritoComponent } from './carrito/carrito.component';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatBadgeModule} from '@angular/material/badge'
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -53,7 +54,9 @@ import {MatBadgeModule} from '@angular/material/badge'
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSnackBarModule,
+    MatSelectModule
   ],
   providers: [ NgbActiveModal ],
   bootstrap: [AppComponent]

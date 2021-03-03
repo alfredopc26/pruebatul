@@ -6,80 +6,123 @@
         <div class="col-lg-6 col-md-8 mx-auto">
           <h1 class="fw-light">Catalogo de productos</h1>
           <p class="lead text-muted">A partir del siguiente catalogo puede seleccionar los productos que necesite y agregarlos al carrito</p>
-            <div class="example-button-row">
-                <button mat-raised-button class='bg-primary' (click)="open(content)" >Agregar Producto</button>
-                <button mat-raised-button>Agregar Categoria</button>
-            </div>
         </div>
       </div>
-      
-      <ng-template #content let-modal>
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Agregar nuevo producto</h4>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form [formGroup]="prodForm" (ngSubmit)="saveTodo()">
-            <div class="mb-3">
-                <label for="categoria" class="form-label">Categoria</label>
-                <select class="form-control" id="categoria" formControlName="categoria">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-              </div>
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" formControlName="nombre">
-              </div>
-              <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripcion</label>
-                <textarea class="form-control" id="descripcion" formControlName="descripcion" rows="3" ></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="image" class="form-label">Agrega la URL de la imagen</label>
-                <input type="text" class="form-control" id="image" formControlName="image">
-              </div>
-              <div class="mb-3">
-                <label for="precio" class="form-label">Precio</label>
-                <input type="number" class="form-control" id="precio" formControlName="precio">
-              </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Close</button>
-            <button class="btn btn-primary" (click)="saveTodo()">Save</button>
-        </div>
-      </ng-template>
     </section>
   </main>
-
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div class="loading" style="text-align: center" *ngIf='loader'><img src="./assets/loader.gif"/><br/>Un momento, por favor...</div>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3  g-3" *ngIf='productosView'>
-        <div class="col" *ngFor="let product of listProducts">
-          <div class="card shadow-sm">
-            <img [src]="product.img" class="card-img-top" width="100%" height="225" alt="arduino">
-            <div class='card-header'>{{product.name}}</div>
-            <div class="card-body">
-              <p class="card-text">{{product.description}}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Detalles</button>
-                  <button type="button" class="btn btn-sm btn-outline-primary"(click)="addCart(product)">Añadir al carrito</button>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
+              <div class="card-header">
+                <div class="card-title">
+                  Listado de productos 
                 </div>
-                <small class="text-muted">Precio: ${{product.price}}</small>
+              </div>
+              <div class="card-body">
+                <div>
+                  <div class="mb-2">
+                      <button mat-raised-button class='bg-primary' (click)="open(producto)" >Agregar Producto </button>
+                      <button mat-raised-button (click)="open(categoria)" >Agregar Categoria</button>
+                    <div class="float-right">
+                      <select class="custom-select" style=" width: auto" (change)="loadProductCat($event.target.value)">
+                        <option value="">Seleccione categoria</option>
+                        <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="loading" style="text-align: center" *ngIf='loader'><img src="./assets/loader.gif"/><br/>Un momento, por favor...</div>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3  g-3" *ngIf='productosView'>
+                  <div class="col" *ngFor="let product of listProducts">
+                    <div class="card shadow-sm">
+                      <img [src]="product.img" class="card-img-top" width="100%" height="225" alt="arduino">
+                      <div class='card-header'>{{product.name}}</div>
+                      <div class="card-body">
+                        <p class="card-text">{{product.description}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Detalles</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addCart(product)" *ngIf="!checkAdded(product.id)" >Añadir al carrito</button>
+                          </div>
+                          <small class="text-muted">Precio: ${{product.price}}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>
         </div>
-      </div>
+        </div>
+  </section>
 
-      
+  <ng-template #producto let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Agregar nuevo producto</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-  </div>
+    <div class="modal-body">
+        <form [formGroup]="prodForm" (ngSubmit)="saveTodo()">
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoria</label>
+            <select class="form-control" id="categoria" formControlName="categoria">
+              <option value="">Seleccione categoria</option>
+              <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>
+              </select>
+          </div>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" formControlName="nombre">
+          </div>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <textarea class="form-control" id="descripcion" formControlName="descripcion" rows="3" ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Agrega la URL de la imagen</label>
+            <input type="text" class="form-control" id="image" formControlName="image">
+          </div>
+          <div class="mb-3">
+            <label for="precio" class="form-label">Precio</label>
+            <input type="number" class="form-control" id="precio" formControlName="precio">
+          </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Close</button>
+        <button class="btn btn-primary" (click)="saveTodo()">Save</button>
+    </div>
+  </ng-template>
 
+  <ng-template #categoria let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Agregar nueva categoria</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="catForm" (ngSubmit)="saveCat()">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre categoria</label>
+            <input type="text" class="form-control" id="nombre" formControlName="nombre">
+          </div>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <textarea class="form-control" id="descripcion" formControlName="descripcion" rows="3" ></textarea>
+          </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Close</button>
+        <button class="btn btn-primary" (click)="saveCat()">Save</button>
+    </div>
+  </ng-template>
