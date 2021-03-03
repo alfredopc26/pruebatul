@@ -30,6 +30,7 @@ export class ProductosComponent implements OnInit {
   catForm: FormGroup;
   user: User;
   listProducts: Array<Item> = [];
+  listProduct: any;
   listCats: Array<categoria> = [];
   listcart: Array<Carrito> = [];
   loader= true;
@@ -150,11 +151,12 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  loadCart() {
+  loadCart(){
+
     this._cart.getByUser(this.user.email).subscribe(response => {
       response.docs.forEach(value => {
+        // alert(this.user.email);
         const data = value.data();
-
         this._db.getByRef(data.producto).subscribe(response => {
           response.docs.forEach(value => { 
               const data = value.data();
@@ -173,6 +175,7 @@ export class ProductosComponent implements OnInit {
         });        
       });
     });
+
   }
 
   open(content) {
@@ -182,6 +185,35 @@ export class ProductosComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  openDetails(content, referencia) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this._db.getByRef(referencia).subscribe(response => {
+      response.docs.find(value => { 
+          let data = value.data();
+          let id = value.id;
+          this.listProduct = {
+            id: id,
+            referencia: data.referencia,
+            name: data.nombre,
+            img: data.image,
+            description: data.descripcion,
+            price: data.precio,
+            quantity: 1
+          };
+
+          console.log(this.listProduct);
+      });
+
+    }); 
+
+  }
+
 
   saveTodo() {
     // Validar el formulario

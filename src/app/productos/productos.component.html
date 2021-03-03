@@ -23,7 +23,7 @@
               <div class="card-body">
                 <div>
                   <div class="mb-2">
-                      <button mat-raised-button class='bg-primary' (click)="open(producto)" >Agregar Producto </button>
+                      <button mat-raised-button class='bg-info' (click)="open(producto)" >Agregar Producto </button>
                       <button mat-raised-button (click)="open(categoria)" >Agregar Categoria</button>
                     <div class="float-right">
                       <select class="custom-select" style=" width: auto" (change)="loadProductCat($event.target.value)">
@@ -45,11 +45,17 @@
                       <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                           <div class="btn-group">
-                            <button mat-mini-fab >
+                            <button mat-mini-fab title="Ver Detalles" (click)="openDetails(detalle, product.referencia)">
                               <mat-icon>visibility</mat-icon>
                             </button>
-                            <button mat-mini-fab (click)="addCart(product)" *ngIf="!checkAdded(product.id)">
+                            <button mat-mini-fab (click)="addCart(product)" *ngIf="!checkAdded(product.id)" title="Agregar al carrito">
                               <mat-icon>add_shopping_cart</mat-icon>
+                            </button>
+                            <button mat-mini-fab title="Editar Producto">
+                              <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-mini-fab color='warn' title="Eliminar Producto">
+                              <mat-icon>delete_forever</mat-icon>
                             </button>
                           </div>
                           <small class="text-muted">Precio: ${{product.price}}</small>
@@ -133,5 +139,42 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
         <button class="btn btn-primary" (click)="saveCat()">Guardar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #detalle let-modal>
+
+    <div class="card card-solid">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <h3 class="d-inline-block d-sm-none">{{ listProduct.name }}</h3>
+            <div class="col-12">
+              <img [src]="listProduct.img" class="product-image" alt="Product Image" width='300' height="300">
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <h3 class="my-3">{{ listProduct.name }}</h3>
+            <p>{{ listProduct.description }}</p>
+
+            <hr>
+            <div class="bg-gray py-2 px-3 mt-4">
+              <h2 class="mb-0">
+                ${{listProduct.price}}
+              </h2>
+            </div>
+
+            <div class="mt-4">
+              <div class="example-button-row">
+                <button mat-raised-button (click)="addCart(listProduct)"  >
+                    Agregar al carrito
+                  <mat-icon title="Agregar al carrito">add_shopping_cart</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
     </div>
   </ng-template>

@@ -21,4 +21,8 @@ export class DbcartfirebaseService {
   save(carrito_: Carrito): Promise<DocumentReference> {
     return this.db.collection(this.CollectionName).add(carrito_);
   }
+
+  delete(id: string): Promise<void>{
+    return this.db.collection(this.CollectionName).doc(id).delete();
+  }
 }
