@@ -28,9 +28,11 @@ export class ProductosComponent implements OnInit {
   closeResult = '';
   prodForm: FormGroup;
   catForm: FormGroup;
+  prodEdit: FormGroup;
   user: User;
   listProducts: Array<Item> = [];
   listProduct: any;
+  IdProduct: string;
   listCats: Array<categoria> = [];
   listcart: Array<Carrito> = [];
   loader= true;
@@ -62,6 +64,15 @@ export class ProductosComponent implements OnInit {
     this.catForm = this.formBuilder.group({
       nombre: ['', Validators.required],
       descripcion: ['']
+    });
+
+    this.prodEdit = this.formBuilder.group({
+      referencia: [0, Validators.required],
+      categoria: ['', Validators.required],
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      image: [''],
+      precio: ['', Validators.required]
     });
     
     this.afAuth.user.subscribe(user => {
@@ -186,6 +197,29 @@ export class ProductosComponent implements OnInit {
     });
   }
 
+  openDelete(content, referencia) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this._db.getByRef(referencia).subscribe(response => {
+      response.docs.find(value => { 
+          let data = value.data();
+          let id = value.id;
+          this.listProduct = {
+            id: id,
+            referencia: data.referencia,
+            name: data.nombre
+          };
+
+          console.log(this.listProduct);
+      });
+
+    }); 
+  }
+
   openDetails(content, referencia) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -214,6 +248,33 @@ export class ProductosComponent implements OnInit {
 
   }
 
+  openEdit(content, referencia) {
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this._db.getByRef(referencia).subscribe(response => {
+      response.docs.find(value => { 
+          let data = value.data();
+          this.IdProduct = value.id;
+          this.prodEdit = this.formBuilder.group({
+            referencia: [data.referencia, Validators.required],
+            categoria: [data.categoria, Validators.required],
+            nombre: [data.nombre, Validators.required],
+            descripcion: [data.descripcion, Validators.required],
+            image: [data.image],
+            precio: [data.precio, Validators.required]
+          });
+
+          console.log(this.IdProduct);
+      });
+
+    }); 
+
+  }
 
   saveTodo() {
     // Validar el formulario
@@ -244,6 +305,35 @@ export class ProductosComponent implements OnInit {
      
       this.loadCat();
       this.openSnackBar("Se ha agregado la categoria", this.catForm.value.nombre );
+  }
+
+  editProd(id) {
+
+    if (this.prodEdit.invalid) {
+      return;
+    }
+ 
+    let producto: Item = this.prodEdit.value;
+    this._db.edit(id, producto)
+      .then(response => this.modalService.dismissAll() ) 
+      .catch(err => console.error(err));
+     
+      this.loader = true;
+      this.productosView = false;
+      this.load()
+      this.openSnackBar("Se ha editado el producto. ", this.prodEdit.value.nombre );
+  }
+
+  deleteProd(id) {
+
+    this._db.delete(id)
+      .then(response => this.modalService.dismissAll() ) 
+      .catch(err => console.error(err));
+     
+      this.loader = true;
+      this.productosView = false;
+      this.load()
+      this.openSnackBar("Se ha eliminado el producto. ", id );
   }
 
   loadProductCat(ref){
