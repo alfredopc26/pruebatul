@@ -12,8 +12,8 @@
           <img [src]="item.img" alt="item1" />
           <span class="item-name">{{item.name}}</span>
           <span class="item-price">${{item.price}}</span>
-          <span class="item-quantity">Quantity: {{item.quantity}}</span>
-          <button type="button" class="btn btn-danger ml-4" (click)="remove(item)">Remove</button>
+          <span class="item-quantity">Cantidad: {{item.quantity}}</span>
+          <button type="button" class="btn btn-danger ml-2" (click)="remove(item)">Quitar</button>
         </li>
       </ul>
       <a href="#" class="button">Checkout</a>

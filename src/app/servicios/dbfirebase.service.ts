@@ -23,6 +23,12 @@ export class DbfirebaseService {
     
   }
 
+  getByRef( refer: number ): Observable<firebase.firestore.QuerySnapshot> {
+            
+    return this.db.collection<Item>(this.CollectionName, ref => ref.where('referencia', '==', refer)).get();
+    
+  }
+
   save(item: Item): Promise<DocumentReference> {
     return this.db.collection(this.CollectionName).add(item);
   }

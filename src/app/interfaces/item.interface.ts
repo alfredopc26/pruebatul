@@ -1,5 +1,6 @@
 export interface Item {
     id:any,
+    referencia:number,
     img:string,
     name:string,
     description:string,

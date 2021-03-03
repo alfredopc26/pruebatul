@@ -4,10 +4,12 @@ import { User } from '@firebase/auth-types';
 
 import { Item } from '../interfaces/item.interface';
 import { categoria } from '../interfaces/categoria.interface';
+import { Carrito  } from '../interfaces/carrito.interface';
 
 import { CarritoService } from '../servicios/carrito.service';
 import { DbfirebaseService } from '../servicios/dbfirebase.service';
 import { DbcatfirebaseService } from '../servicios/dbcatfirebase.service';
+import { DbcartfirebaseService } from '../servicios/dbcartfirebase.service';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,6 +31,7 @@ export class ProductosComponent implements OnInit {
   user: User;
   listProducts: Array<Item> = [];
   listCats: Array<categoria> = [];
+  listcart: Array<Carrito> = [];
   loader= true;
   productosView = false;
 
@@ -37,6 +40,7 @@ export class ProductosComponent implements OnInit {
     private _cartService:CarritoService, 
     private _db:DbfirebaseService,
     private _cat:DbcatfirebaseService,
+    private _cart:DbcartfirebaseService,
     private formBuilder: FormBuilder,
     private ngZone: NgZone,
     private router: Router,
@@ -46,6 +50,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit(){
 
     this.prodForm = this.formBuilder.group({
+      referencia: ['', Validators.required],
       categoria: ['', Validators.required],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -63,6 +68,7 @@ export class ProductosComponent implements OnInit {
         this.user = user;
         this.load();
         this.loadCat();
+        this.loadCart();
       }else{
         this.ngZone.run(() => {
           this.router.navigate(['/login']);
@@ -74,7 +80,16 @@ export class ProductosComponent implements OnInit {
   addCart(product:Item)
   {
     this._cartService.changeCart(product);
-    this.openSnackBar("Se ha agregado el siguiente item al carrito", product.name );
+
+    let datos: Carrito = {
+      usuario: this.user.email,
+      producto: product.referencia
+    };
+    this._cart.save(datos)
+    .then( ) 
+    .catch(err => console.error(err));
+
+    this.openSnackBar("Se ha agregado el siguiente item al carrito", product.name )
   }
 
   checkAdded(item){
@@ -101,6 +116,7 @@ export class ProductosComponent implements OnInit {
         const id = value.id;
         const datos: Item = {
           id: id,
+          referencia: data.referencia,
           name: data.nombre,
           img: data.image,
           description: data.descripcion,
@@ -130,6 +146,31 @@ export class ProductosComponent implements OnInit {
 
       this.listCats.push(datos);
       console.log(this.listCats);
+      });
+    });
+  }
+
+  loadCart() {
+    this._cart.getByUser(this.user.email).subscribe(response => {
+      response.docs.forEach(value => {
+        const data = value.data();
+
+        this._db.getByRef(data.producto).subscribe(response => {
+          response.docs.forEach(value => { 
+              const data = value.data();
+              const id = value.id;
+              const datos: Item = {
+                id: id,
+                referencia: data.referencia,
+                name: data.nombre,
+                img: data.image,
+                description: data.descripcion,
+                price: data.precio,
+                quantity: 1
+              };
+              this._cartService.changeCart(datos);
+          });
+        });        
       });
     });
   }
@@ -187,6 +228,7 @@ export class ProductosComponent implements OnInit {
         const id = value.id;
         const datos: Item = {
           id: id,
+          referencia: data.referencia,
           name: data.nombre,
           img: data.image,
           description: data.descripcion,

@@ -77,6 +77,10 @@
     <div class="modal-body">
         <form [formGroup]="prodForm" (ngSubmit)="saveTodo()">
         <div class="mb-3">
+          <label for="referencia" class="form-label"># referencia</label>
+          <input type="number" class="form-control" id="referencia" formControlName="referencia">
+        </div>
+        <div class="mb-3">
             <label for="categoria" class="form-label">Categoria</label>
             <select class="form-control" id="categoria" formControlName="categoria">
               <option value="">Seleccione categoria</option>
