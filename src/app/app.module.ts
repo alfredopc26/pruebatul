@@ -29,6 +29,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatBadgeModule} from '@angular/material/badge'
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 
 
@@ -39,7 +40,8 @@ import {MatSelectModule} from '@angular/material/select';
     ProductosComponent,
     RegistrarComponent,
     HeaderComponent,
-    CarritoComponent
+    CarritoComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,

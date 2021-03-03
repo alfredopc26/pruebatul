@@ -1,7 +1,7 @@
 <div class="container">
     <div class="shopping-cart">
       <div class="shopping-cart-header">
-        <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">{{totalQuantity}}</span>
+        <i class="fa fa-shopping-cart cart-icon"></i><span class="badge bg-info">{{totalQuantity}}</span>
         <div class="shopping-cart-total">
           <span class="lighter-text">Total:</span>
           <span class="main-color-text">${{totalPrice}}</span>
@@ -16,7 +16,7 @@
           <button type="button" class="btn btn-danger ml-2" (click)="remove(item)">Quitar</button>
         </li>
       </ul>
-      <a href="#" class="button">Checkout</a>
+      <button mat-raised-button class='bg-info' [routerLink]="['/checkout']" >Proceder con el pago </button>
     </div> <!--end shopping-cart -->
 </div>
   
