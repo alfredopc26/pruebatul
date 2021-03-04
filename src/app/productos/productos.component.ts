@@ -29,14 +29,20 @@ export class ProductosComponent implements OnInit {
   prodForm: FormGroup;
   catForm: FormGroup;
   prodEdit: FormGroup;
+  catEdit: FormGroup;
   user: User;
   listProducts: Array<Item> = [];
   listProduct: any;
+  categoryName = 'Todos';
   IdProduct: string;
+  IdCat: string;
   listCats: Array<categoria> = [];
+  listCat: any;
   listcart: Array<Carrito> = [];
   loader= true;
   productosView = false;
+  productosNone = false;
+  productBycat = false;
 
   constructor( 
     private afAuth: AngularFireAuth, 
@@ -73,6 +79,11 @@ export class ProductosComponent implements OnInit {
       descripcion: ['', Validators.required],
       image: [''],
       precio: ['', Validators.required]
+    });
+
+    this.catEdit = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      descripcion: ['']
     });
     
     this.afAuth.user.subscribe(user => {
@@ -139,8 +150,14 @@ export class ProductosComponent implements OnInit {
       this.listProducts.push(datos);
       this.loader = false;
       this.productosView = true;
+      this.productosNone = false;
       console.log(this.listProducts);
       });
+
+      if(!this.productosView){
+        this.loader = false;
+        this.productosNone = true;
+      }
     });
   }
 
@@ -276,6 +293,59 @@ export class ProductosComponent implements OnInit {
 
   }
 
+  openEditCat(content, referencia) {  
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this._cat.getByName(referencia).subscribe(response => {
+      response.docs.find(value => { 
+          let data = value.data();
+          this.IdCat = value.id;
+          this.catEdit = this.formBuilder.group({
+            nombre: [data.nombre, Validators.required],
+            descripcion: [data.descripcion]
+          });
+      });
+
+    }); 
+
+  }
+
+  openDeleteCat(content, referencia) {
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this._db.getByCat(referencia).subscribe(response => {
+      this.listCats = [];
+      response.docs.forEach(value => {
+        const data = value.data();
+       if( value.id){
+          this.productBycat = true;
+       }
+      });
+    });
+
+    this._cat.getByName(referencia).subscribe(response => {
+      response.docs.find(value => { 
+          let data = value.data();
+          let id = value.id;
+          this.listCat= {
+            id: id,
+            name: data.nombre
+          };
+      });
+
+    }); 
+  }
+
+
   saveTodo() {
     // Validar el formulario
     if (this.prodForm.invalid) {
@@ -324,6 +394,22 @@ export class ProductosComponent implements OnInit {
       this.openSnackBar("Se ha editado el producto. ", this.prodEdit.value.nombre );
   }
 
+  editCat(id) {
+
+    if (this.catEdit.invalid) {
+      return;
+    }
+ 
+    let categoria: categoria = this.catEdit.value;
+    this._cat.edit(id, categoria)
+      .then(response => this.modalService.dismissAll() ) 
+      .catch(err => console.error(err));
+     
+      this.loadCat();
+      this.categoryName= this.catEdit.value.nombre ;
+      this.openSnackBar("Se ha editado la categoria. ", this.catEdit.value.nombre );
+  }
+
   deleteProd(id) {
 
     this._db.delete(id)
@@ -336,13 +422,36 @@ export class ProductosComponent implements OnInit {
       this.openSnackBar("Se ha eliminado el producto. ", id );
   }
 
+  deleteCat(id) {
+
+    this._cat.delete(id)
+      .then(response => this.modalService.dismissAll() ) 
+      .catch(err => console.error(err));
+     
+
+      this.loadCat()
+      this.categoryName= 'Todos';
+      this.openSnackBar("Se ha eliminadola categoria. ", id );
+  }
+
   loadProductCat(ref){
 
     if(ref==""){
       this.loader= true;
       this.productosView = false;
+      this.categoryName= "Todos";
       this.load();
     }else{
+
+    this._cat.getByName(ref).subscribe(response => {
+      response.docs.find(value => {
+        const data = value.data();
+        this.categoryName= data.nombre;
+      console.log(this.categoryName);
+      });
+    });
+    this.loader= true;
+    this.productosView = false;
     this._db.getByCat(ref).subscribe(response => {
       this.listProducts = [];
       response.docs.forEach(value => {
@@ -361,11 +470,18 @@ export class ProductosComponent implements OnInit {
       this.listProducts.push(datos);
       this.loader = false;
       this.productosView = true;
+      this.productosNone = false;
       console.log(this.listProducts);
       });
+
+      if(!this.productosView){
+        this.loader = false;
+        this.productosNone = true;
+      }
+
     });
+  }
           
-    }
   }
 
   private getDismissReason(reason: any): string {

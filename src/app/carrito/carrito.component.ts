@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Item } from '../interfaces/item.interface';
 import { Observable, Subscription } from 'rxjs';
 import { CarritoService } from '../servicios/carrito.service';
-import { DbcartfirebaseService } from '../servicios/dbcartfirebase.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from '@firebase/auth-types';
+import { DbcartfirebaseService } from '../servicios/dbcartfirebase.service';
 
 @Component({
   selector: 'app-carrito',
@@ -17,13 +17,13 @@ export class CarritoComponent implements OnInit {
   public totalPrice:number = 0;
   public totalQuantity:number = 0;
   user: User;
-  clientesSubscription: Subscription;
-  currendata$: any;
 
   constructor(
     private afAuth: AngularFireAuth,
-    private _cartService:CarritoService, 
-    private _cart:DbcartfirebaseService,) { }
+    private _cartService:CarritoService,
+    private _cart:DbcartfirebaseService 
+    
+    ) { }
 
   ngOnInit(){
 
@@ -33,24 +33,17 @@ export class CarritoComponent implements OnInit {
       }
     });
 
-
-    this.currendata$ = this._cartService.currentDataCart$;    
-    this.clientesSubscription = this.currendata$.subscribe(x=>{
-                if(x)
-                {
-                  this.items = x;
-                  this.totalQuantity = x.length;
-                  this.totalPrice = x.reduce((sum, current) => sum + (current.price * current.quantity), 0);
-                }
-              })
-              
+    this._cartService.currentDataCart$.subscribe(x=>{
+        if(x)
+        {
+          this.items = x;
+          this.totalQuantity = x.length;
+          this.totalPrice = x.reduce((sum, current) => sum + (current.price * current.quantity), 0);
+        }
+      })        
   }
 
-  ngOnDestroy() {
-    this.clientesSubscription.unsubscribe();
-  }
-
-  public remove(producto:Item)
+ remove(producto:Item)
   {
     this._cartService.removeElementCart(producto);
 
@@ -68,5 +61,7 @@ export class CarritoComponent implements OnInit {
       });
     });
   }
+
+
 
 }

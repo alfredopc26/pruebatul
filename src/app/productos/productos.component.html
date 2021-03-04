@@ -40,10 +40,17 @@
                   <div class="mb-2">
                       <button mat-raised-button class='bg-info' (click)="open(producto)" >Agregar Producto </button>
                       <button mat-raised-button (click)="open(categoria)" >Agregar Categoria</button>
+                      <span class="text-category" >{{ categoryName }}</span>
+                        <button mat-icon-button (click)="openEditCat(categoriaEditar, categoryName)" *ngIf="categoryName!='Todos'">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="openDeleteCat(borrarCat, categoryName)" *ngIf="categoryName!='Todos'">
+                          <mat-icon>delete_forever</mat-icon>
+                        </button>
                     <div class="float-right">
                       <select class="custom-select" style=" width: auto" (change)="loadProductCat($event.target.value)">
                         <option value="">Todas las categorias</option>
-                        <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>                        
+                        <option value="index" *ngFor="let cat of listCats" [value]="cat.nombre"> {{ cat.nombre }}</option>                        
                       </select>
                     </div>
                   </div>
@@ -79,6 +86,9 @@
                     </div>
                   </div>
                 </div>
+                <div class="row" *ngIf='productosNone'>
+                  <p>No hay item para esta categoria </p>
+                </div>
               </div>
             </div>
           </div>
@@ -104,7 +114,7 @@
             <label for="categoria" class="form-label">Categoria</label>
             <select class="form-control" id="categoria" formControlName="categoria">
               <option value="">Seleccione categoria</option>
-              <option value="index" *ngFor="let cat of listCats" [value]="cat.id"> {{ cat.nombre }}</option>
+              <option value="index" *ngFor="let cat of listCats" [value]="cat.nombre"> {{ cat.nombre }}</option>
               </select>
           </div>
         <div class="mb-3">
@@ -199,6 +209,31 @@
     </div>
   </ng-template>
 
+  <ng-template #categoriaEditar let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Editar categoria</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="catEdit" (ngSubmit)="editCat(IdCat)">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre categoria</label>
+            <input type="text" class="form-control" id="nombre" formControlName="nombre">
+          </div>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <textarea class="form-control" id="descripcion" formControlName="descripcion" rows="3" ></textarea>
+          </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
+        <button class="btn btn-primary" (click)="editCat(IdCat)">Guardar</button>
+    </div>
+  </ng-template>
+
   <ng-template #detalle let-modal>
     <div class="card card-solid">
       <div class="card-body">
@@ -248,5 +283,22 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
         <button class="btn btn-danger" (click)="deleteProd(listProduct.id)">Borrar</button>
+    </div>
+  </ng-template>
+
+  <ng-template #borrarCat let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Borrar caegoria {{ listCat.name }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+       <p *ngIf="!productBycat" >Desea Borrar la categoria {{ listCat.name }} </p>
+       <p *ngIf="productBycat" >La categoria {{ listCat.name }} tiene productos asignados, debe eliminarlos primero. </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
+        <button class="btn btn-danger" (click)="deleteCat(listCat.id)" *ngIf="!productBycat">Borrar</button>
     </div>
   </ng-template>

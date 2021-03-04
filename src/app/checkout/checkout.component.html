@@ -8,33 +8,23 @@
         <div class="col-md-5 col-lg-4 order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">Tu carrito de compras</span>
-            <span class="badge bg-secondary rounded-pill">3</span>
+            <span class="badge bg-secondary rounded-pill">{{ totalQuantity }}</span>
           </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
+          <ul class="list-group mb-3 shopping-cart-items">
+            <li class="list-group-item d-flex justify-content-between lh-sm " *ngFor="let item of items">
               <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
+                <img [src]="item.img" alt="item1" />
+                <span class="item-ref">REF #{{item.referencia}}</span>
+                <span class="item-name">{{item.name}}</span>
+                <span class="item-price">${{item.price}}</span>
+                <span class="item-quantity">Cantidad: {{item.quantity}}</span>
               </div>
-              <span class="text-muted">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$5</span>
+              <span class="text-muted">{{ item.precio }}</span>
+              <button mat-button color="warn" (click)="remove(item)">Quitar</button>
             </li>
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (COP)</span>
-              <strong>$20</strong>
+              <strong>${{ totalPrice }}</strong>
             </li>
           </ul>          
         </div>
@@ -95,7 +85,7 @@
               </div>
             </div>
   
-            <div class="row gy-4">
+            <div class="row gy-4" >
               <div class="col-md-6">
                 <label for="cc-name" class="form-label">Nombre del propietario</label>
                 <input type="text" class="form-control" id="cc-name" placeholder="" >
