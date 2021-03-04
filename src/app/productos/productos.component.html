@@ -44,7 +44,7 @@
                         <button mat-icon-button (click)="openEditCat(categoriaEditar, categoryName)" *ngIf="categoryName!='Todos'">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-icon-button (click)="openDeleteCat(borrarCat, categoryName)" *ngIf="categoryName!='Todos'">
+                        <button mat-icon-button color='warn' (click)="openDeleteCat(borrarCat, categoryName)" *ngIf="categoryName!='Todos'">
                           <mat-icon>delete_forever</mat-icon>
                         </button>
                     <div class="float-right">
@@ -62,6 +62,7 @@
                     <div class="card shadow-sm">
                       <img [src]="product.img" class="card-img-top" height="225" alt="image">
                       <div class='card-header'>
+                        <b>#{{product.referencia}} </b>- 
                         {{product.name}}
                       </div>
                       <div class="card-body">
