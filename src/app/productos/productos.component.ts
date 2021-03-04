@@ -215,6 +215,7 @@ export class ProductosComponent implements OnInit {
   }
 
   openDelete(content, referencia) {
+
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -323,9 +324,7 @@ export class ProductosComponent implements OnInit {
     });
 
     this._db.getByCat(referencia).subscribe(response => {
-      this.listCats = [];
       response.docs.forEach(value => {
-        const data = value.data();
        if( value.id){
           this.productBycat = true;
        }

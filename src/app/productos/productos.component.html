@@ -108,7 +108,7 @@
         <form [formGroup]="prodForm" (ngSubmit)="saveTodo()">
         <div class="mb-3">
           <label for="referencia" class="form-label"># referencia</label>
-          <input type="number" class="form-control" id="referencia" formControlName="referencia">
+          <input type="number" class="form-control" id="referencia" formControlName="referencia" placeholder='Ej. 1001'>
         </div>
         <div class="mb-3">
             <label for="categoria" class="form-label">Categoria</label>
@@ -137,7 +137,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
-        <button class="btn btn-primary" (click)="saveTodo()">Guardar</button>
+        <button class="btn btn-info" (click)="saveTodo()">Guardar</button>
     </div>
   </ng-template>
 
@@ -180,7 +180,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
-        <button class="btn btn-primary" (click)="editProd(IdProduct)">Guardar</button>
+        <button class="btn btn-info" (click)="editProd(IdProduct)">Guardar</button>
     </div>
   </ng-template>
 
@@ -205,7 +205,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
-        <button class="btn btn-primary" (click)="saveCat()">Guardar</button>
+        <button class="btn btn-info" (click)="saveCat()">Guardar</button>
     </div>
   </ng-template>
 
@@ -230,7 +230,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')" >Cancelar</button>
-        <button class="btn btn-primary" (click)="editCat(IdCat)">Guardar</button>
+        <button class="btn btn-info" (click)="editCat(IdCat)">Guardar</button>
     </div>
   </ng-template>
 

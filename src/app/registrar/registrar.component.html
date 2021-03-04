@@ -4,33 +4,30 @@
         <h1 class="h3 mb-3 fw-normal">Por favor registrese para iniciar sesion</h1>
           <div class="form-group">
             <label for="title">Correo*</label>
-            <input type="text" id="email" placeholder="Email" class="form-control" formControlName="email" />
+            <input type="text" id="email" placeholder="Correo" class="form-control" formControlName="email" />
             <span style="color:Red;"
-              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.required">Email is
-              required.</span>
+              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.required">Correo requerido</span>
           </div>
     
           <div class="form-group">
-            <label for="description">Contrase;a*</label>
-            <input id="password" type="password" placeholder="Password" class="form-control" formControlName="password" />
+            <label for="description">Contraseña*</label>
+            <input id="password" type="password" placeholder="Contraseña" class="form-control" formControlName="password" />
             <span style="color:Red;"
-              *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].errors?.required">Password is
-              required.</span>
+              *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].errors?.required">Contraseña requerida.</span>
           </div>
 
           <div class="form-group">
-            <label for="confirm_pass">Confirmar contrase;a*</label>
-            <input id="confirm_pass" type="password" placeholder="Confirmar Contrase;a" class="form-control" formControlName="confirm_pass" />
+            <label for="confirm_pass">Confirmar contraseña*</label>
+            <input id="confirm_pass" type="password" placeholder="Confirmar Contraseña" class="form-control" formControlName="confirm_pass" />
             <span style="color:Red;"
-              *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].errors?.required">Password is
-              required.</span>
+              *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].errors?.required">Contraseña requerida.</span>
           </div>
           <span style="color:Red;">{{errorMessage}}</span>
           <div class="buttons-container center">
-            <button class="btn btn-primary" (click)="createUser()">
+            <button mat-raised-button class="btn btn-info" (click)="createUser()">
               Registrar
             </button>
-            <button class="btn btn-secondary" (click)="back()">
+            <button mat-raised-button class="btn btn-secondary" (click)="back()">
               Cancelar
             </button>
           </div>
