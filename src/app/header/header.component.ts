@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
     })
   }
 
-  cart(){ //Se usa para abrir o cerrar el carrito
+  cart(){ 
     this.openCart = !this.openCart;
   }
 

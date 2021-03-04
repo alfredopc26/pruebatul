@@ -345,7 +345,6 @@ export class ProductosComponent implements OnInit {
     }); 
   }
 
-
   saveTodo() {
     // Validar el formulario
     if (this.prodForm.invalid) {
@@ -360,6 +359,15 @@ export class ProductosComponent implements OnInit {
       this.loader = true;
       this.productosView = false;
       this.load()
+      
+      this.prodForm = this.formBuilder.group({
+        referencia: ['', Validators.required],
+        categoria: ['', Validators.required],
+        nombre: ['', Validators.required],
+        descripcion: ['', Validators.required],
+        image: [''],
+        precio: ['', Validators.required]
+      });
   }
 
   saveCat() {
